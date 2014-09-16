@@ -1,7 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" 
+	xmlns="http://www.mulesoft.org/schema/mule/core" 
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.5.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
-http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd"></mule>
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:googlemaps="http://www.mulesoft.org/schema/mule/googlemaps"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/googlemaps http://www.mulesoft.org/schema/mule/googlemaps/1.0/mule-googlemaps.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	<spring:beans>
+		<context:annotation-config/>
+		<context:component-scan base-package="com.ar.myfirstmashup.component"/>
+		<spring:import resource="classpath:applicationContext.xml"/>
+	</spring:beans>
+	<flow name="myfirstmashuup_youtube_search" initialState="started">
+		<http:inbound-endpoint exchange-pattern="request-response" 
+		path="myfirstmashup/mysearch" host="localhost" port="7070"/>
+		<http:body-to-parameter-map-transformer />
+		<set-variable variableName="keyword" value="#[message.payload['keyword']]" doc:name="Variable" />
+		<component doc:name="MyYoutubeSearch">
+			<spring-object bean="MyYoutubeSearch"/>
+		</component>
+		<echo-component doc:name="Echo"/>
+	</flow>
+</mule>
