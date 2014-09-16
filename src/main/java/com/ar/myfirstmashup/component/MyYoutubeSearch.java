@@ -19,6 +19,7 @@ import com.google.api.services.youtube.model.ResourceId;
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
 import com.google.api.services.youtube.model.Thumbnail;
+import com.google.gson.Gson;
 
 public class MyYoutubeSearch implements Callable {
 
@@ -77,7 +78,9 @@ public class MyYoutubeSearch implements Callable {
 			SearchListResponse searchResponse = search.execute();
 			List<SearchResult> searchResultList = searchResponse.getItems();
 			if (searchResultList != null) {
-				return prettyPrint(searchResultList.iterator(), queryTerm);
+				List<YoutubeBean> list = prettyPrint(searchResultList.iterator(), queryTerm);
+				Gson gson = new Gson();
+				return gson.toJson(list).toString();
 			}
 		} catch (GoogleJsonResponseException e) {
 			System.err.println("There was a service error: "

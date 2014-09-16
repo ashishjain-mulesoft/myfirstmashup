@@ -16,16 +16,54 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry including="**/*.java" kind="src" output="target/test-classes" path="src/test/resources"/>
-	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="var" path="M2_REPO"/>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/google-api-client-1.18.0-rc.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/google-api-client-android-1.18.0-rc.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/google-api-client-appengine-1.18.0-rc.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/google-api-client-gson-1.18.0-rc.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/google-api-client-jackson2-1.18.0-rc.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/google-api-client-java6-1.18.0-rc.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/google-api-client-protobuf-1.18.0-rc.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/google-api-client-servlet-1.18.0-rc.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/google-api-client-xml-1.18.0-rc.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/google-http-client-1.18.0-rc.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/google-http-client-android-1.18.0-rc.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/google-http-client-appengine-1.18.0-rc.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/google-http-client-gson-1.18.0-rc.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/google-http-client-jackson-1.18.0-rc.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/google-http-client-jackson2-1.18.0-rc.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/google-http-client-jdo-1.18.0-rc.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/google-http-client-protobuf-1.18.0-rc.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/google-http-client-xml-1.18.0-rc.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/google-oauth-client-1.18.0-rc.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/google-oauth-client-appengine-1.18.0-rc.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/google-oauth-client-java6-1.18.0-rc.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/google-oauth-client-jetty-1.18.0-rc.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/google-oauth-client-servlet-1.18.0-rc.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/gson-2.1.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/httpclient-4.0.1.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/httpcore-4.0.1.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/jackson-core-2.1.3.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/jackson-core-asl-1.9.11.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/jdo2-api-2.3-eb.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/jetty-6.1.26.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/jetty-util-6.1.26.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/jsr305-1.3.9.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/protobuf-java-2.4.1.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/transaction-api-1.1.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/xpp3-1.1.4c.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/google-api-services-youtubeAnalytics-v1-rev24-1.17.0-rc.jar"/>
+	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/google-api-services-youtube-v3-rev107-1.18.0-rc.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

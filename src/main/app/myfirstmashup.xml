@@ -24,6 +24,6 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 		<component doc:name="MyYoutubeSearch">
 			<spring-object bean="MyYoutubeSearch"/>
 		</component>
-		<echo-component doc:name="Echo"/>
+		
 	</flow>
 </mule>

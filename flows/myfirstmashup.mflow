@@ -14,7 +14,7 @@
             <property name="auxiliary;index" value="4"/>
         </properties>
     </global-element>
-    <flow SubFlow="false" name="myfirstmashuup_youtube_search" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="bae423ca-8d89-4ec4-b241-4425a4a16511">
+    <flow SubFlow="false" name="myfirstmashuup_youtube_search" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="ff375219-b022-4637-b1aa-2d4b00fce32d">
         <properties>
             <property name="initialState" value="started"/>
             <property name="processingStrategy2"/>
@@ -83,12 +83,6 @@
                         <property name="auxiliary;index" value="10"/>
                         <property name="auxiliary;wrapIn" value="10"/>
                     </property-collection>
-                </properties>
-            </pattern>
-            <pattern name="Echo" type="org.mule.tooling.ui.modules.core.pattern.echo" entity-id="Echo#1">
-                <graphicalData x="0" y="0" width="0" height="0"/>
-                <properties>
-                    <property name="auxiliary;index" value="11"/>
                 </properties>
             </pattern>
         </lane>
