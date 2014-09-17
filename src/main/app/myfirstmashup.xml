@@ -1,29 +1,118 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" 
-	xmlns="http://www.mulesoft.org/schema/mule/core" 
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:mongo="http://www.mulesoft.org/schema/mule/mongo" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.5.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns:googlemaps="http://www.mulesoft.org/schema/mule/googlemaps"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:googlemaps="http://www.mulesoft.org/schema/mule/googlemaps"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:jdbc-ee="http://www.mulesoft.org/schema/mule/ee/jdbc"
+	xmlns:twilio="http://www.mulesoft.org/schema/mule/twilio"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/mongo http://www.mulesoft.org/schema/mule/mongo/1.0/mule-mongo.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.mulesoft.org/schema/mule/ee/jdbc http://www.mulesoft.org/schema/mule/ee/jdbc/3.5/mule-jdbc-ee.xsd
+http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/googlemaps http://www.mulesoft.org/schema/mule/googlemaps/1.0/mule-googlemaps.xsd
-http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/3.5/mule-vm.xsd
+http://www.mulesoft.org/schema/mule/twilio http://www.mulesoft.org/schema/mule/twilio/current/mule-twilio.xsd">
+	<context:property-placeholder location="classpath:myfirstmashup.properties" />
 	<spring:beans>
-		<context:annotation-config/>
-		<context:component-scan base-package="com.ar.myfirstmashup.component"/>
-		<spring:import resource="classpath:applicationContext.xml"/>
+		<spring:bean id="dataSource"
+			class="org.enhydra.jdbc.standard.StandardDataSource" destroy-method="shutdown">
+			<spring:property name="driverName" value="com.mysql.jdbc.Driver" />
+			<spring:property name="url"
+				value="jdbc:mysql://localhost:3306/mymashup" />
+			<spring:property name="user" value="root" />
+			<spring:property name="password" value="root" />
+		</spring:bean>
+		<context:annotation-config></context:annotation-config>
+		<context:component-scan base-package="com.ar.myfirstmashup.component"></context:component-scan>
 	</spring:beans>
-	<flow name="myfirstmashuup_youtube_search" initialState="started">
-		<http:inbound-endpoint exchange-pattern="request-response" 
-		path="myfirstmashup/mysearch" host="localhost" port="7070"/>
-		<http:body-to-parameter-map-transformer />
-		<set-variable variableName="keyword" value="#[message.payload['keyword']]" doc:name="Variable" />
+	<spring:beans>
+		<spring:import resource="classpath:applicationContext.xml" />
+	</spring:beans>
+
+	<twilio:config authToken="${twilio.auth.token}"
+		accountSid="${twilio.account.sid}" name="mymashup-twilio" doc:name="Twilio">
+		<twilio:http-callback-config />
+	</twilio:config>
+
+	<jdbc-ee:connector name="jdbcEeConnector"
+		pollingFrequency="1000" dataSource-ref="dataSource" queryTimeout="10"
+		handleOutputResultSets="true" transactionPerMessage="false" doc:name="Database">
+		<jdbc-ee:query key="insertReqests"
+			value="insert into searchrequest (number,text) values (#[flowVars['number']],#[flowVars['keyword']])" />
+		<jdbc-ee:query key="selectCongis"
+			value="select sid,authtoken from mymashup.twilioconfigs" />
+	</jdbc-ee:connector>
+	
+	<flow name="myfirstmashuup_youtube_search" initialState="started"
+		doc:name="myfirstmashuup_youtube_search">
+		<http:inbound-endpoint exchange-pattern="request-response"
+			path="myfirstmashup/mysearch" host="localhost" port="7070" doc:name="HTTP" />
+		<http:body-to-parameter-map-transformer
+			doc:name="Body to Parameter Map" />
+		<set-variable variableName="keyword"
+			value="shakira" doc:name="Variable" />
 		<component doc:name="MyYoutubeSearch">
-			<spring-object bean="MyYoutubeSearch"/>
+			<spring-object bean="MyYoutubeSearch" />
 		</component>
-		
+	</flow>
+
+	<flow name="sendSmsToClients" doc:name="sendSmsToClients"
+		initialState="started">
+		<http:inbound-endpoint host="localhost" port="9090"
+			path="send-sms" doc:name="HTTP" />
+		<http:body-to-parameter-map-transformer
+			doc:name="Body to Parameter Map" />
+		<set-variable variableName="keyword"
+			value="#[message.payload['keyword']]" doc:name="Variable" />
+		<set-variable variableName="number"
+			value="#[message.payload['number']]" doc:name="Variable" />
+		<jdbc-ee:outbound-endpoint connector-ref="jdbcEeConnector"
+				queryKey="insertReqests" exchange-pattern="request-response" />
+		<component doc:name="MyYoutubeSearch">
+			<spring-object bean="MyYoutubeSearch" />
+		</component>
+		<set-variable variableName="response" value="#[payload]" doc:name="Variable" />
+		<set-payload value=""/>
+		<twilio:send-sms-message config-ref="mymashup-twilio"
+			accountSid="${twilio.account.sid}" from="${twilio.phone.number}" to="#[flowVars['number']]"
+			body="Hi Ashish! Your account balance is USD#[flowVars['keyword']]"
+			doc:name="Twilio" />
+		<set-payload value="#[flowVars['response']]"/>
+	</flow>
+
+	<flow name="receiveSMSClient" doc:name="receiveSMSClient"
+		initialState="stopped">
+		<jdbc-ee:inbound-endpoint connector-ref="jdbcEeConnector"
+			queryKey="selectCongis" pollingFrequency="10000" exchange-pattern="request-response" />
+		<choice>
+			<when
+				expression="#[payload!=null &amp;&amp; payload instanceof java.util.ArrayList &amp;&amp; payload.size() &gt; 0]">
+				<foreach collection="#[payload]">
+					<component doc:name="NotificationReader">
+						<spring-object bean="NotificationReader" />
+					</component>
+				</foreach>
+			</when>
+			<otherwise>
+				<component doc:name="NotificationReader">
+					<spring-object bean="NotificationReader" />
+				</component>
+			</otherwise>
+		</choice>
+		<foreach collection="#[payload]">
+			<set-variable value="#[payload['sid']]" variableName="number" doc:name="Variable" />
+			<set-variable value="#[payload['text']]" variableName="text" doc:name="Variable" />
+			<jdbc-ee:outbound-endpoint connector-ref="jdbcEeConnector"
+				queryKey="insertReqests" exchange-pattern="request-response" />
+			<twilio:send-sms-message config-ref="mymashup-twilio"
+				accountSid="${twilio.account.sid}" from="${twilio.phone.number}" to="+16364397366"
+				body="Hi Ashish! Your account balance is USD#[flowVars['text']]"
+				doc:name="Twilio" />
+		</foreach>
 	</flow>
 </mule>

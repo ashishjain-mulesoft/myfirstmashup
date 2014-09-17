@@ -9,5 +9,6 @@
 
 	
 		<bean name="MyYoutubeSearch" class="com.ar.myfirstmashup.component.MyYoutubeSearch"></bean>
+		<bean name="NotificationReader" class="com.ar.myfirstmashup.component.NotificationReader"></bean>
 
 </beans>
