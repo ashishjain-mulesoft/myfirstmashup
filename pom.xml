@@ -84,11 +84,21 @@
 			<artifactId>mule-transport-email</artifactId>
 			<version>3.4.0</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.twilio.sdk</groupId>
 			<artifactId>twilio-java-sdk</artifactId>
 			<version>3.4.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.modules</groupId>
+			<artifactId>mule-module-twitter</artifactId>
+			<version>LATEST</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.modules</groupId>
+			<artifactId>mule-module-facebook</artifactId>
+			<version>LATEST</version>
 		</dependency>
 	</dependencies>
 
@@ -114,6 +124,34 @@
 						<inclusion>
 							<groupId>org.mule.modules</groupId>
 							<artifactId>mule-module-twilio</artifactId>
+						</inclusion>
+					</inclusions>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.mule.tools</groupId>
+				<artifactId>maven-mule-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<excludeMuleDependencies>false</excludeMuleDependencies>
+					<inclusions>
+						<inclusion>
+							<groupId>org.mule.modules</groupId>
+							<artifactId>mule-module-twitter</artifactId>
+						</inclusion>
+					</inclusions>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.mule.tools</groupId>
+				<artifactId>maven-mule-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<excludeMuleDependencies>false</excludeMuleDependencies>
+					<inclusions>
+						<inclusion>
+							<groupId>org.mule.modules</groupId>
+							<artifactId>mule-module-facebook</artifactId>
 						</inclusion>
 					</inclusions>
 				</configuration>

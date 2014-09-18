@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
 	xmlns:mongo="http://www.mulesoft.org/schema/mule/mongo" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.5.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:googlemaps="http://www.mulesoft.org/schema/mule/googlemaps"
 	xmlns:util="http://www.springframework.org/schema/util" xmlns:jdbc-ee="http://www.mulesoft.org/schema/mule/ee/jdbc"
 	xmlns:twilio="http://www.mulesoft.org/schema/mule/twilio"
+	xmlns:twitter="http://www.mulesoft.org/schema/mule/twitter"
+	xmlns:facebook="http://www.mulesoft.org/schema/mule/facebook"
 	xmlns:context="http://www.springframework.org/schema/context" xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
 	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/mongo http://www.mulesoft.org/schema/mule/mongo/1.0/mule-mongo.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
@@ -16,7 +18,11 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
 http://www.mulesoft.org/schema/mule/googlemaps http://www.mulesoft.org/schema/mule/googlemaps/1.0/mule-googlemaps.xsd
 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/3.5/mule-vm.xsd
-http://www.mulesoft.org/schema/mule/twilio http://www.mulesoft.org/schema/mule/twilio/current/mule-twilio.xsd">
+http://www.mulesoft.org/schema/mule/twilio http://www.mulesoft.org/schema/mule/twilio/current/mule-twilio.xsd
+http://www.mulesoft.org/schema/mule/twitter http://www.mulesoft.org/schema/mule/twitter/current/mule-twitter.xsd
+http://www.mulesoft.org/schema/mule/facebook http://www.mulesoft.org/schema/mule/facebook/current/mule-facebook.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
 	<context:property-placeholder location="classpath:myfirstmashup.properties" />
 	<spring:beans>
 		<spring:bean id="dataSource"
@@ -47,18 +53,34 @@ http://www.mulesoft.org/schema/mule/twilio http://www.mulesoft.org/schema/mule/t
 		<jdbc-ee:query key="selectCongis"
 			value="select sid,authtoken from mymashup.twilioconfigs" />
 	</jdbc-ee:connector>
+    <twitter:config name="Twitter" accessKey="${twitter.token}" accessSecret="${twitter.tokensecret}" consumerKey="${twitter.apikey}" consumerSecret="${twitter.apisecret}" doc:name="Twitter">
+        <twitter:connection-pooling-profile initialisationPolicy="INITIALISE_ONE" exhaustedAction="WHEN_EXHAUSTED_GROW"/>
+    </twitter:config>
 	
 	<flow name="myfirstmashuup_youtube_search" initialState="started"
 		doc:name="myfirstmashuup_youtube_search">
 		<http:inbound-endpoint exchange-pattern="request-response"
-			path="myfirstmashup/mysearch" host="localhost" port="7070" doc:name="HTTP" />
-		<http:body-to-parameter-map-transformer
-			doc:name="Body to Parameter Map" />
+			path="myfirstmashup/mysearch" host="localhost" port="9090" doc:name="HTTP" />
 		<set-variable variableName="keyword"
 			value="shakira" doc:name="Variable" />
 		<component doc:name="MyYoutubeSearch">
 			<spring-object bean="MyYoutubeSearch" />
 		</component>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
+	</flow>
+	
+	<flow name="myfirstmashuup_youtube_mysearch" initialState="started"
+		doc:name="myfirstmashuup_youtube_mysearch">
+		<http:inbound-endpoint exchange-pattern="request-response"
+			path="myfirstmashup/search" host="localhost" port="9090" doc:name="HTTP" />
+		<http:body-to-parameter-map-transformer
+			doc:name="Body to Parameter Map" />
+		<set-variable variableName="keyword"
+			value="#[message.payload['keyword']]" doc:name="Variable" />
+		<component doc:name="MyYoutubeSearch">
+			<spring-object bean="MyYoutubeSearch" />
+		</component>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
 	</flow>
 
 	<flow name="sendSmsToClients" doc:name="sendSmsToClients"
@@ -72,27 +94,28 @@ http://www.mulesoft.org/schema/mule/twilio http://www.mulesoft.org/schema/mule/t
 		<set-variable variableName="number"
 			value="#[message.payload['number']]" doc:name="Variable" />
 		<jdbc-ee:outbound-endpoint connector-ref="jdbcEeConnector"
-				queryKey="insertReqests" exchange-pattern="request-response" />
+				queryKey="insertReqests" exchange-pattern="request-response" doc:name="Database"/>
 		<component doc:name="MyYoutubeSearch">
 			<spring-object bean="MyYoutubeSearch" />
 		</component>
 		<set-variable variableName="response" value="#[payload]" doc:name="Variable" />
-		<set-payload value=""/>
+		<set-payload doc:name="Set Payload" value=""/>
 		<twilio:send-sms-message config-ref="mymashup-twilio"
 			accountSid="${twilio.account.sid}" from="${twilio.phone.number}" to="#[flowVars['number']]"
 			body="Hi Ashish! Your account balance is USD#[flowVars['keyword']]"
 			doc:name="Twilio" />
-		<set-payload value="#[flowVars['response']]"/>
+		<set-payload value="#[flowVars['response']]" doc:name="Set Payload"/>
+		<json:object-to-json-transformer doc:name="Object to JSON" />
 	</flow>
 
 	<flow name="receiveSMSClient" doc:name="receiveSMSClient"
 		initialState="stopped">
 		<jdbc-ee:inbound-endpoint connector-ref="jdbcEeConnector"
-			queryKey="selectCongis" pollingFrequency="10000" exchange-pattern="request-response" />
-		<choice>
+			queryKey="selectCongis" pollingFrequency="10000" doc:name="Database"/>
+		<choice doc:name="Choice">
 			<when
 				expression="#[payload!=null &amp;&amp; payload instanceof java.util.ArrayList &amp;&amp; payload.size() &gt; 0]">
-				<foreach collection="#[payload]">
+				<foreach collection="#[payload]" doc:name="For Each">
 					<component doc:name="NotificationReader">
 						<spring-object bean="NotificationReader" />
 					</component>
@@ -104,15 +127,22 @@ http://www.mulesoft.org/schema/mule/twilio http://www.mulesoft.org/schema/mule/t
 				</component>
 			</otherwise>
 		</choice>
-		<foreach collection="#[payload]">
+		<foreach collection="#[payload]" doc:name="For Each">
 			<set-variable value="#[payload['sid']]" variableName="number" doc:name="Variable" />
 			<set-variable value="#[payload['text']]" variableName="text" doc:name="Variable" />
 			<jdbc-ee:outbound-endpoint connector-ref="jdbcEeConnector"
-				queryKey="insertReqests" exchange-pattern="request-response" />
+				queryKey="insertReqests" exchange-pattern="request-response" doc:name="Database"/>
 			<twilio:send-sms-message config-ref="mymashup-twilio"
 				accountSid="${twilio.account.sid}" from="${twilio.phone.number}" to="+16364397366"
 				body="Hi Ashish! Your account balance is USD#[flowVars['text']]"
 				doc:name="Twilio" />
 		</foreach>
 	</flow>
+    <flow name="twitter_mashup" doc:name="twitter_mashup" initialState="started">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9090" path="myfirstmashup/tweetvideo" doc:name="HTTP"/>
+        <http:body-to-parameter-map-transformer
+			doc:name="Body to Parameter Map" />
+        <twitter:update-status config-ref="Twitter"  status="Hey, have a look on this vide #[payload['url']]" doc:name="Twitter"/>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
+    </flow>
 </mule>

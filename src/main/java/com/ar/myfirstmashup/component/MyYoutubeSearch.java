@@ -26,7 +26,7 @@ public class MyYoutubeSearch implements Callable {
 	@Value("${youtube.apikey}")
 	private String api_key;
 
-	private static final long NUMBER_OF_VIDEOS_RETURNED = 25;
+	private static final long NUMBER_OF_VIDEOS_RETURNED = 24;
 
 	/**
 	 * Define a global instance of a Youtube object, which will be used to make

@@ -67,5 +67,6 @@
 	</classpathentry>
 	<classpathentry kind="con" path="MULE_LIB/Twilio"/>
 	<classpathentry kind="lib" path="/Users/ashishritika/Downloads/google-api-java-client/libs/twilio-java-sdk-3.4.5.jar"/>
+	<classpathentry kind="con" path="MULE_LIB/Twitter"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
