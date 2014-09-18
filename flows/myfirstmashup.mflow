@@ -98,7 +98,7 @@
             <property name="auxiliary;index" value="14"/>
             <property name="dataSource-ref to JDBC DataSource" value="dataSource"/>
             <property-collection name="@http://www.mulesoft.org/schema/mule/ee/jdbc/query;0">
-                <property name="value" value="insert into searchrequest (number,text) values (#[flowVars['number']],#[flowVars['keyword']])"/>
+                <property name="value" value="insert into searchrequest (number,text) values (#[flowVars['number']],#[flowVars['text']])"/>
                 <property name="key" value="insertReqests"/>
                 <property name="auxiliary;index" value="15"/>
                 <property name="auxiliary;wrapIn" value="15"/>
@@ -132,7 +132,7 @@
             </property-collection>
         </properties>
     </global-element>
-    <flow SubFlow="false" name="myfirstmashuup_youtube_search" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="a566696f-b995-4e6a-af81-d14253cd2fa8">
+    <flow SubFlow="false" name="myfirstmashuup_youtube_search" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="e4de424c-7314-4f5d-aedd-3f7c709f5bbc">
         <properties>
             <property name="initialState" value="started"/>
             <property name="processingStrategy2"/>
@@ -207,7 +207,7 @@
             </pattern>
         </lane>
     </flow>
-    <flow SubFlow="false" name="myfirstmashuup_youtube_mysearch" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="9b7cdc87-ab8c-42fb-a29f-a67712a65c27">
+    <flow SubFlow="false" name="myfirstmashuup_youtube_mysearch" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="609dabbb-36dc-47e5-b2c1-a65bfc27d90d">
         <properties>
             <property name="initialState" value="started"/>
             <property name="processingStrategy2"/>
@@ -292,7 +292,7 @@
             </pattern>
         </lane>
     </flow>
-    <flow SubFlow="false" name="sendSmsToClients" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="8b8d9967-a9c7-41e8-ae19-f575f43dd225">
+    <flow SubFlow="false" name="sendSmsToClients" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="af2bdb76-e40f-4306-a2c4-3b3abcb28eb4">
         <properties>
             <property name="initialState" value="started"/>
             <property name="processingStrategy2"/>
@@ -445,7 +445,7 @@
             </pattern>
         </lane>
     </flow>
-    <flow SubFlow="false" name="receiveSMSClient" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="715b38f4-7717-4210-9cf6-96df7be0829d">
+    <flow SubFlow="false" name="receiveSMSClient" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="41aaf0c4-5966-4039-ab08-3523686ed6c6">
         <properties>
             <property name="initialState" value="stopped"/>
             <property name="processingStrategy2"/>
@@ -481,20 +481,20 @@
             <splitter index="47" name="Choice" type="org.mule.tooling.ui.modules.core.pattern.cbr" entity-id="Choice#1">
                 <graphicalData x="0" y="0" width="0" height="0"/>
                 <properties>
-                    <property-collection name="dcccf483-38ef-4ddd-a743-9964d49be6f1">
-                        <property name="choice.otherwise" value="true"/>
-                        <property-collection name="choice.attributes"/>
-                    </property-collection>
-                    <property-collection name="c1a63f9d-3cbb-40dd-a652-104647665cf7">
+                    <property-collection name="1c0047b0-1d45-48be-8fbd-a5591b32fda2">
                         <property name="choice.expression" value="#[payload!=null &amp;&amp; payload instanceof java.util.ArrayList &amp;&amp; payload.size() &gt; 0]"/>
                         <property-collection name="choice.attributes">
                             <property name="expression" value="#[payload!=null &amp;&amp; payload instanceof java.util.ArrayList &amp;&amp; payload.size() &gt; 0]"/>
                         </property-collection>
                     </property-collection>
+                    <property-collection name="4de8aa6d-bc4a-476e-a471-b253452021a3">
+                        <property name="choice.otherwise" value="true"/>
+                        <property-collection name="choice.attributes"/>
+                    </property-collection>
                 </properties>
                 <pattern name="Choice" type="org.mule.tooling.ui.modules.core.pattern.cbr" entity-id="Choice#2"/>
                 <compartment entity-id="compartment#1">
-                    <lane hadOnlyOneElement="false" index="49" isChoiceOtherwiseLane="false" entity-id="c1a63f9d-3cbb-40dd-a652-104647665cf7">
+                    <lane hadOnlyOneElement="false" index="49" isChoiceOtherwiseLane="false" entity-id="1c0047b0-1d45-48be-8fbd-a5591b32fda2">
                         <scope name="For Each" type="http://www.mulesoft.org/schema/mule/core/foreach" entity-id="For Each#1">
                             <graphicalData x="0" y="0" width="0" height="0"/>
                             <properties>
@@ -522,7 +522,7 @@
                             </compartment>
                         </scope>
                     </lane>
-                    <lane hadOnlyOneElement="false" index="53" isChoiceOtherwiseLane="true" entity-id="dcccf483-38ef-4ddd-a743-9964d49be6f1">
+                    <lane hadOnlyOneElement="false" index="53" isChoiceOtherwiseLane="true" entity-id="4de8aa6d-bc4a-476e-a471-b253452021a3">
                         <pattern name="NotificationReader" type="http://www.mulesoft.org/schema/mule/core/component" entity-id="Java#5">
                             <graphicalData x="0" y="0" width="0" height="0"/>
                             <properties>
@@ -608,7 +608,7 @@
             </scope>
         </lane>
     </flow>
-    <flow SubFlow="false" name="twitter_mashup" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="02c212e2-640e-44a6-ae19-a8d347c59676">
+    <flow SubFlow="false" name="twitter_mashup" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="24d2627b-c4f6-4f8e-8774-e38bff6d0a36">
         <properties>
             <property name="initialState" value="started"/>
             <property name="processingStrategy2"/>
@@ -682,6 +682,124 @@
                     <property name="encoding"/>
                     <property name="mapper-ref"/>
                     <property name="auxiliary;index" value="64"/>
+                    <property name="mimeType"/>
+                </properties>
+            </pattern>
+        </lane>
+    </flow>
+    <flow SubFlow="false" name="twilio_mashup" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="e553bf12-2512-4ef0-8c62-16fc62255774">
+        <properties>
+            <property name="initialState" value="started"/>
+            <property name="processingStrategy2"/>
+            <property name="processingStrategy"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="65"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#8">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <endpoint direction="Inbound" message-exchange-pattern="RequestResponse" name="HTTP" type="http://www.mulesoft.org/schema/mule/http/endpoint" entity-id="HTTP#5">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="port" value="9090"/>
+                    <property name="host" value="localhost"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="followRedirects"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/http/endpoint"/>
+                    <property name="keep-alive"/>
+                    <property name="contentType"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="password"/>
+                    <property name="exchange-pattern" value="request-response"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="httpLabel"/>
+                    <property name="address"/>
+                    <property name="path" value="myfirstmashup/smsvideo"/>
+                    <property name="encoding"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="method"/>
+                    <property name="user"/>
+                    <property name="auxiliary;index" value="66"/>
+                    <property name="responseTimeout"/>
+                    <property name="mimeType"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+            <pattern name="Body to Parameter Map" type="http://www.mulesoft.org/schema/mule/http/body-to-parameter-map-transformer" entity-id="Body to Parameter Map#4">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property name="auxiliary;index" value="67"/>
+                    <property name="mimeType"/>
+                </properties>
+            </pattern>
+            <pattern name="Variable" type="http://www.mulesoft.org/schema/mule/core/variable-transformer" entity-id="Variable#8">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="variableName" value="number"/>
+                    <property name="value" value="#[payload['number']]"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/core/set-variable"/>
+                    <property name="auxiliary;index" value="68"/>
+                </properties>
+            </pattern>
+            <pattern name="Variable" type="http://www.mulesoft.org/schema/mule/core/variable-transformer" entity-id="Variable#9">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="variableName" value="text"/>
+                    <property name="value" value="#[payload['url']]"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/core/set-variable"/>
+                    <property name="auxiliary;index" value="69"/>
+                </properties>
+            </pattern>
+            <endpoint direction="Outbound" message-exchange-pattern="OneWay" name="Database" type="http://www.mulesoft.org/schema/mule/ee/jdbc/endpoint" entity-id="Database#5">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name=""/>
+                    <property name="businessEventsLabel"/>
+                    <property name="pollingFrequency"/>
+                    <property name="queryTimeout"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="exchange-pattern" value="request-response"/>
+                    <property name="queryKey" value="insertReqests"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="address"/>
+                    <property name="encoding"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="auxiliary;index" value="70"/>
+                    <property name="responseTimeout"/>
+                    <property name="mimeType"/>
+                    <property name="connector-ref" value="jdbcEeConnector"/>
+                </properties>
+            </endpoint>
+            <pattern name="Twilio" type="http://www.mulesoft.org/schema/mule/twilio/twilio-connector" entity-id="Twilio#4">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="to" value="#[flowVars['number']]"/>
+                    <property name="body" value="Hey! Checkout this video #[flowVars['text']]"/>
+                    <property name="accountSid" value="${twilio.account.sid}"/>
+                    <property name="applicationSid"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/twilio/send-sms-message"/>
+                    <property name="status-callback-flow-ref"/>
+                    <property name="from" value="${twilio.phone.number}"/>
+                    <property name="config-ref" value="mymashup-twilio"/>
+                    <property name="auxiliary;index" value="71"/>
+                </properties>
+            </pattern>
+            <pattern name="Object to JSON" type="http://www.mulesoft.org/schema/mule/json/object-to-json-transformer" entity-id="Object to JSON#5">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="sourceClass"/>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property name="mapper-ref"/>
+                    <property name="auxiliary;index" value="72"/>
                     <property name="mimeType"/>
                 </properties>
             </pattern>

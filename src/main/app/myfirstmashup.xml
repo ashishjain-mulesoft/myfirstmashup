@@ -49,7 +49,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 		pollingFrequency="1000" dataSource-ref="dataSource" queryTimeout="10"
 		handleOutputResultSets="true" transactionPerMessage="false" doc:name="Database">
 		<jdbc-ee:query key="insertReqests"
-			value="insert into searchrequest (number,text) values (#[flowVars['number']],#[flowVars['keyword']])" />
+			value="insert into searchrequest (number,text) values (#[flowVars['number']],#[flowVars['text']])" />
 		<jdbc-ee:query key="selectCongis"
 			value="select sid,authtoken from mymashup.twilioconfigs" />
 	</jdbc-ee:connector>
@@ -143,6 +143,20 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
         <http:body-to-parameter-map-transformer
 			doc:name="Body to Parameter Map" />
         <twitter:update-status config-ref="Twitter"  status="Hey, have a look on this vide #[payload['url']]" doc:name="Twitter"/>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
+    </flow>
+    <flow name="twilio_mashup" doc:name="twilio_mashup" initialState="started">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9090" path="myfirstmashup/smsvideo" doc:name="HTTP"/>
+        <http:body-to-parameter-map-transformer
+			doc:name="Body to Parameter Map" />
+		<set-variable value="#[payload['number']]" variableName="number" doc:name="Variable" />
+		<set-variable value="#[payload['url']]" variableName="text" doc:name="Variable" />
+		<jdbc-ee:outbound-endpoint connector-ref="jdbcEeConnector"
+				queryKey="insertReqests" exchange-pattern="request-response" doc:name="Database"/>
+        <twilio:send-sms-message config-ref="mymashup-twilio"
+				accountSid="${twilio.account.sid}" from="${twilio.phone.number}" to="#[flowVars['number']]"
+				body="Hey! Checkout this video #[flowVars['text']]"
+				doc:name="Twilio" />
         <json:object-to-json-transformer doc:name="Object to JSON"/>
     </flow>
 </mule>
