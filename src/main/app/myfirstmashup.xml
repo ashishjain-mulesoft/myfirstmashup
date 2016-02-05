@@ -39,6 +39,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 	<spring:beans>
 		<spring:import resource="classpath:applicationContext.xml" />
 	</spring:beans>
+	<http:listener-config port="9095" name="mysocialpage" host="localhost" />
 
 	<twilio:config authToken="${twilio.auth.token}"
 		accountSid="${twilio.account.sid}" name="mymashup-twilio" doc:name="Twilio">
@@ -59,8 +60,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 	
 	<flow name="myfirstmashuup_youtube_search" initialState="started"
 		doc:name="myfirstmashuup_youtube_search">
-		<http:inbound-endpoint exchange-pattern="request-response"
-			path="myfirstmashup/mysearch" host="localhost" port="9090" doc:name="HTTP" />
+		<http:listener config-ref="mysocialpage" path="myfirstmashup/mysearch"  />
 		<set-variable variableName="keyword"
 			value="shakira" doc:name="Variable" />
 		<component doc:name="MyYoutubeSearch">
@@ -71,8 +71,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 	
 	<flow name="myfirstmashuup_youtube_mysearch" initialState="started"
 		doc:name="myfirstmashuup_youtube_mysearch">
-		<http:inbound-endpoint exchange-pattern="request-response"
-			path="myfirstmashup/search" host="localhost" port="9090" doc:name="HTTP" />
+		<http:listener config-ref="mysocialpage" path="myfirstmashup/search"/>
 		<http:body-to-parameter-map-transformer
 			doc:name="Body to Parameter Map" />
 		<set-variable variableName="keyword"
