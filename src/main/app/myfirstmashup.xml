@@ -86,7 +86,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 
 	<flow name="sendSmsToClients" doc:name="sendSmsToClients"
 		initialState="started">
-		<http:inbound-endpoint host="localhost" port="9090"
+		<http:listener config-ref="mysocialpage"  
 			path="send-sms" doc:name="HTTP" />
 		<http:body-to-parameter-map-transformer
 			doc:name="Body to Parameter Map" />
@@ -140,14 +140,14 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 		</foreach>
 	</flow>
     <flow name="twitter_mashup" doc:name="twitter_mashup" initialState="started">
-        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9090" path="myfirstmashup/tweetvideo" doc:name="HTTP"/>
+        <http:listener config-ref="mysocialpage" path="myfirstmashup/tweetvideo" doc:name="HTTP"/>
         <http:body-to-parameter-map-transformer
 			doc:name="Body to Parameter Map" />
         <twitter:update-status config-ref="Twitter"  status="Hey, have a look on this vide #[payload['url']]" doc:name="Twitter"/>
         <json:object-to-json-transformer doc:name="Object to JSON"/>
     </flow>
     <flow name="twilio_mashup" doc:name="twilio_mashup" initialState="started">
-        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9090" path="myfirstmashup/smsvideo" doc:name="HTTP"/>
+        <http:listener config-ref="mysocialpage" path="myfirstmashup/smsvideo" doc:name="HTTP"/>
         <http:body-to-parameter-map-transformer
 			doc:name="Body to Parameter Map" />
 		<set-variable value="#[payload['number']]" variableName="number" doc:name="Variable" />
